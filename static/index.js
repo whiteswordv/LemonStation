@@ -26,6 +26,16 @@ function createTile(motor) {
     tileGrid.append(tile); 
 }
 
+function settings(motor) {
+    // let id = motor.id; 
+    // let name = getDisplay(motor);
+    // let disabled = motor.disabled; 
+
+    // let panel = document.createElement("div"); 
+    // panel.className = "panel"; 
+
+}
+
 function removeTile(motor) {
     
     [...tileGrid.querySelectorAll(".motor-tile",)].forEach(tile => {
@@ -66,20 +76,20 @@ function getImage(motor) {
     }
 }
 
-function settings(motor) {
-    
-}
+
 
 let oldMotors = [];
 let motors = [
         {
             id: 0,
-            type: "sparkmax"
+            type: "sparkmax",
+            disabled: false,
         }, 
 
         {
             id: 1,
-            type: "krakenx60"
+            type: "krakenx60",
+            disabled: false,
         }
     ];
 
@@ -88,11 +98,22 @@ function includesMotor(array, motor) {
 }
 
 function updateMotors() {
+
+    // getting the data from the flask local host
+    fetch("/motors")
+        .then(response => response.json())
+        .then(data => {
+            motors.push(data)
+        });
+    
+    // creating the tiles without repeats Uwu
     motors.forEach(motor => {
-        if (includesMotor(oldMotors, motor)) return;
+        if (includesMotor(oldMotors, motor)) 
+            return;
 
         createTile(motor); 
     });
+
 
     oldMotors.forEach(oldMotor => {
 

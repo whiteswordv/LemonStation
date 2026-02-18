@@ -8,6 +8,8 @@
 
     --active-color: rgb(161, 255, 203);
     --active-text-color: rgb(16, 36, 54);
+
+    
 }
 
 *, *::before, *::after {
@@ -75,4 +77,10 @@ body {
 .motor-tile:active {
     background-color: var(--active-color);
     color: var(--active-text-color);
+    border: 10px solid var(--border-color);
+}
+
+
+.panel {
+    background-color: var(--primary-color);
 }
