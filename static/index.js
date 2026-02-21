@@ -1,5 +1,5 @@
 const tileGrid = document.getElementById("motor-grid"); 
-let networkConnected = false;
+const motorMenu = document.getElementById("motor-menu");
 
 function createTile(motor) {
 
@@ -28,12 +28,28 @@ function createTile(motor) {
 }
 
 function settings(motor) {
-    // let id = motor.id; 
-    // let name = getDisplay(motor);
-    // let disabled = motor.disabled; 
 
-    // let panel = document.createElement("div"); 
-    // panel.className = "panel"; 
+    motorMenu.classList.remove("hidden");
+    tileGrid.classList.add("hidden"); 
+
+    let id = motor.id; 
+    let name = getDisplay(motor);
+
+    let back = document.getElementById("back-button"); 
+
+    let slider = document.getElementById("speed-slider"); 
+    let apply = document.getElementById("apply-button"); 
+
+    apply.addEventListener("click", () => {
+        let speed = slider.value;
+
+        console.log(speed); 
+    }); 
+
+    back.addEventListener("click", () => {
+        tileGrid.classList.remove("hidden"); 
+        motorMenu.classList.add("hidden");
+    });
 
 }
 
@@ -101,11 +117,9 @@ function includesMotor(array, motor) {
 function updateMotors() {
 
     // getting the data from the flask local host
-    fetch("/motors")
-        .then(response => response.json())
-        .then(data => {
-            motors.push(data)
-    })
+    // fetch("/motors")
+    //     .then(response => response.json())
+    //     .then(data => motors = data);
     
     // creating the tiles without repeats Uwu
     motors.forEach(motor => {
@@ -127,5 +141,6 @@ function updateMotors() {
 }
 
 updateMotors();
+motorMenu.classList.add("hidden");
 
 setInterval(updateMotors, 200);

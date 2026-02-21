@@ -1,37 +1,43 @@
-from flask import Flask, send_file, jsonify
+from flask import Flask, request, send_file, jsonify
 from networktables import NetworkTables
-import threading
-import time
 
 app = Flask(__name__, static_url_path="")
+
+def set_team(number): 
+    NetworkTables.setServerTeam(number)
+
+
+set_team(308)
+NetworkTables.initialize()
+table = NetworkTables.getTable("LemonStation")
 
 @app.route('/')
 def index():
     return send_file('static/index.html')
 
+@app.route("/motors")
+def motors(): 
+    sub_tables = table.getSubTables()
+    json_data = []
+
+    for sub_name in sub_tables:
+        sub_table = table.getSubTable(sub_name)
+
+        json_data.append(
+        {
+            "id": int(sub_name),
+            "type": sub_table.getString("motorType", ""),
+            "speed": sub_table.getNumber("speed", 0)
+        })
+    
+
+    return jsonify(json_data)
+
+@app.post("/speed/<int:id>")
+def set_motor_speed(id):
+    speed = request.args.get("speed") or 0
+
+    table.getSubTable(str(id)).putNumber("speed", speed)
+
 if __name__ == "__main__":
     app.run()
-
-#--- network setup UW0
-
-NetworkTables.setServerTeam(308, 1735) # 1735 the deafult port
-NetworkTables.initialize()
-table = NetworkTables.getTable("LemonStation")
-
-def pending_connection():
-    while not NetworkTables.isConnected():
-        time.sleep(0.5)
-
-threading.Thread(target=pending_connection, daemon=True).start() 
-
-#stuff to generate the json thingy 
-
-@app.route("/motors")
-def motors():
-    jsonData = {
-        "id": table.getNumber("motorid", 0),
-        "type": table.getString("motorType", ""),
-        "disabled": table.getBoolean("disabled", False),
-    }
-
-    return jsonify(jsonData)
