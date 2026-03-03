@@ -1,38 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style/style.css" />
+        <title>Lemon Workstation</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/style.css">
-    <title>Lemon Workstation</title>
-</head>
+    <body>
+        <div id="motor-grid"></div>
 
-<body>
+        <div id="motor-menu">
+            <div class="img-container">
+                <img id="motor-img" />
+            </div>
 
-    <div id="motor-grid"></div>
-
-    <div id="motor-menu">
-
-        <div class="img-container">
-            <img id="motor-img">
-        </div>
-
-        <div class="parent">
-            <div id="properties">
-                <!-- <img id="motor-img"> -->
-                <h1 id="motor-name"></h1>
-                <h2 id="motor-id"></h2>
-
-                <input type="range" min="-100" max="100" value="0" id="speed-slider" title="speed">
-                
-                <button title="back" id="back-button">Back</button>
+            <div class="parent">
+                <div id="properties">
+                    <!-- <img id="motor-img"> -->
+                    <h1 id="motor-name"></h1>
+                    <h2 id="motor-id"></h2>
+                    <input
+                        type="range"
+                        min="-100"
+                        max="100"
+                        value="0"
+                        id="speed-slider"
+                        title="speed"
+                    />
+                    <button title="back" id="back-button">Back</button>
+                </div>
             </div>
         </div>
 
-    </div>
-
-    <script src="index.js"></script>
-</body>
-
+        <script src="index.js"></script>
+    </body>
 </html>
