@@ -29,10 +29,9 @@ def motors():
         json_data.append(
             {
                 "id": int(sub_name),
-                "brushless": sub_table.getBoolean("bushless", False),
-                "type": sub_table.getString("motorType", ""),
+                "brushless": sub_table.getBoolean("brushless", False),
+                "type": sub_table.getString("type", ""),
                 "speed": sub_table.getNumber("speed", 0),
-                # "state": sub_table.getString("break", "Unknown")
             }
         )
 
@@ -41,9 +40,15 @@ def motors():
 
 @app.post("/speed/<int:id>")
 def set_motor_speed(id):
-    speed = request.args.get("speed") or 0
+    speed = request.args.get("v") or 0
 
     table.getSubTable(str(id)).putNumber("speed", speed)
+
+@app.post("/brushless/<int:id>")
+def set_brushless(id):
+    brushless = request.args.get("v") == "brushless";
+
+    table.getSubTable(str(id)).putNumber("brushless", brushless)
 
 
 if __name__ == "__main__":

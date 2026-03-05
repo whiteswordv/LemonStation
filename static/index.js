@@ -39,15 +39,16 @@ function settings(motor) {
   idHeader.innerHTML = "CAN id " + id;
 
   if (getDisplay(motor) == "SPARK MAX") {
-    let dropDown = document.createElement("input");
-    dropDown.attributes = document.createAttribute("type");
-    dropDown.attributes = document.createAttribute("id");
+    let dropdown = document.createElement("input");
+    dropdown.attributes = document.createAttribute("type");
+    dropdown.attributes = document.createAttribute("id");
 
-    dropDown.innerHTML = "<a brushed </a> <a brushless </a>";
+    dropdown.innerHTML = "<a brushed </a> <a brushless </a>";
 
-    dropDown.addEventListener("input", () => {
-      if (dropDown.value == "brushed") motor.brushless = false;
-      else motor.brushless = true;
+    dropdown.addEventListener("input", () => {
+      fetch(`/speed/${id}?v=${dropdown.value}`, {
+        method: "POST",
+      });
     });
   }
 
@@ -60,13 +61,10 @@ function settings(motor) {
   slider.value = motor.speed;
 
   slider.addEventListener("input", () => {
-    let speed = Number(slider.value);
+    let speed = slider.value;
 
-    fetch("/speed/" + id, {
+    fetch(`/speed/${id}?v=${speed}`, {
       method: "POST",
-      body: JSON.stringify({
-        speed: speed,
-      }),
     });
   });
 
