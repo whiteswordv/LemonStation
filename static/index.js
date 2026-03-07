@@ -114,16 +114,20 @@ function getImage(motor) {
 
 let oldMotors = [];
 let motors = [
-  // {
-  //     id: 0,
-  //     type: "sparkmax",
-  //     speed: 0,
-  // },
-  // {
-  //     id: 1,
-  //     type: "krakenx60",
-  //     speed: 0,
-  // }
+  {
+      id: 0,
+      type: "sparkmax",
+      speed: 0,
+      brushless: false,
+      iverted: false,
+
+  },
+  {
+      id: 1,
+      type: "krakenx60",
+      speed: 0,
+      inverted: false,
+  }
 ];
 
 function includesMotor(array, motor) {
@@ -143,9 +147,9 @@ function updateMotors() {
     createTile(motor);
   });
 
-  oldMotors.forEach((oldMotor) => {
-    if (!includesMotor(motors, oldMotor)) removeTile(oldMotor);
-  });
+  // oldMotors.forEach((oldMotor) => {
+  //   if (!includesMotor(motors, oldMotor)) removeTile(oldMotor);
+  // });
 
   oldMotors = [...motors];
 }
