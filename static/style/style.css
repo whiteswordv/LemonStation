@@ -14,11 +14,13 @@
 *::after {
     box-sizing: border-box;
     margin: 0;
+    scrollbar-color: #a1ffcb transparent;
 }
 
 body {
     display: flex;
     align-items: stretch;
+    overflow: hidden;
     width: 100dvw;
     height: 100dvh;
 
@@ -35,7 +37,6 @@ body {
     min-width: 0;
     overflow-x: scroll;
     scrollbar-width: auto;
-    scrollbar-color: #a1ffcb transparent;
 
     animation: background-animation linear;
     animation-timeline: scroll(nearest inline);
@@ -46,6 +47,14 @@ img {
     display: block;
 }
 
+#motor-img {
+    display: flex;
+    aspect-ratio: 1 / 1;
+    width: auto;
+    height: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+}
 
 .motor-tile {
 
@@ -136,6 +145,7 @@ img {
     min-height: 0;
     flex-direction: column;
     align-content: center;
+    overflow: hidden;
 }
 
 #properties {
@@ -150,6 +160,7 @@ img {
     border-radius: 5px;
     width: 100%;
     gap: 2dvh;
+    flex: 0 1 min-content;
 
     button {
         font-size: 3dvh;
@@ -185,7 +196,11 @@ img {
 
 .parent {
     width: 100%;
-    min-height: fit-content;
+    height: 100%;
+    gap: 1rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 /* you cant catually make a transparent checkbox when unchecked. whoop dee doo!!!!!!!!  */
@@ -216,4 +231,30 @@ img {
     background-size: 80%;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+#dash-container {
+    min-height: 100px;
+    flex: 1 1 auto;
+    gap: 20px;
+
+    width: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#output {
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--primary-color);
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  word-break: break-all;
 }

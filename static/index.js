@@ -98,7 +98,7 @@ function settings(motor) {
 function getOutput(motor, text) {
 
   setInterval(() => {
-    output = motor.output;
+    output = motor.output; 
 
     text.innerText = motor.output;
   }, 200);
