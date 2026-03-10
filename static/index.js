@@ -3,6 +3,10 @@ const warning = document.getElementById("warning");
 const motorMenu = document.getElementById("motor-menu");
 
 function createTile(motor) {
+
+  if (motor.type == "unknown")
+    return;
+
   let tile = document.createElement("div");
   tile.classList.add("motor-tile");
 
@@ -67,9 +71,8 @@ function settings(motor) {
   let motorImage = document.getElementById("motor-img");
   motorImage.setAttribute("src", getImage(motor));
 
-  let output = document.getElementById("output");
-  getOutput(motor, output);
-
+  let faults = document.getElementById("faults");
+  getFaults(motor, faults);
 
   speedSlider.addEventListener("input", () => {
     let speed = speedSlider.value * invertedValue;
@@ -95,12 +98,11 @@ function settings(motor) {
   });
 }
 
-function getOutput(motor, text) {
+function getFaults(motor, text) {
 
   setInterval(() => {
-    output = motor.output; 
 
-    text.innerText = motor.output;
+    text.innerText = motor.faults;
   }, 200);
 }
 
@@ -174,7 +176,7 @@ function updateMotors() {
   });
 
   // oldMotors.forEach((oldMotor) => {
-  //   if (!includesMotor(motors, oldMotor)) removeTile(oldMotor);
+  //   if (!includesMotor(motors, oldMotor)) removeTile(oldMotor || oldMotor.type == "unknown");
   // });
 
   oldMotors = [...motors];

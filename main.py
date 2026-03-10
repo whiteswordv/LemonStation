@@ -32,7 +32,7 @@ def motors():
                 "brushless": sub_table.getBoolean("brushless", False),
                 "type": sub_table.getString("type", ""),
                 "speed": sub_table.getNumber("speed", 0),
-                "output": sub_table.getString("output", ""),
+                "faults": sub_table.getString("fualts", ""),
             }
         )
 
@@ -50,7 +50,7 @@ def set_motor_speed(id):
 def set_brushless(id):
     brushless = request.args.get("v") == "brushless"
 
-    table.getSubTable(str(id)).putNumber("brushless", brushless)
+    table.getSubTable(str(id)).putBoolean("brushless", brushless)
 
 
 if __name__ == "__main__":
