@@ -10,4 +10,4 @@ dependencies = [
 ]
 
 [project.scripts]
-lemon = "main:app.run"
+lemon = "app.run"
