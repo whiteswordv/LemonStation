@@ -8,3 +8,6 @@ dependencies = [
     "flask>=3.1.2",
     "pynetworktables>=2021.0.0",
 ]
+
+[project.scripts]
+lemon = "main:app.run"
