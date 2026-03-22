@@ -17,7 +17,9 @@
 
             <div id="dash-container">
                 <img id="motor-img" />
-                <p id="output"></p>
+                <div id="faults">
+
+                </div>
             </div>
 
             <div id="properties">
@@ -25,9 +27,22 @@
                 <h1 id="motor-name"></h1>
                 <h2 id="motor-id"></h2>
                 <input type="range" min="-100" max="100" value="0" id="speed-slider" title="speed" />
+
+                <div id="drop-down-container">
+                    <select name="Motor Type" id="motor-dropdown-type">
+                        <option value="brushed" title="brushed"></option>
+                        <option value="brushless" title="brushless"></option>
+                    </select>
+                </div>
+
                 <div class="invert-container">
                     <input type="checkbox" id="inverted-input" />
-                    <h2 id="motor-id">Inverted</h2>
+                    <h2 id="inverted">Inverted</h2>
+                </div>
+
+                <div class="disabled-container">
+                    <input type="checkbox" id="disabled-input" checked>
+                    <h2 id="disabled">Disabled</h2>
                 </div>
 
                 <button title="back" id="back-button">Back</button>
