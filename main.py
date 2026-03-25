@@ -5,9 +5,11 @@ import threading
 app = Flask(__name__, static_url_path="")
 table = NetworkTables.getTable("LemonStation")
 
+server = "roboRIO-308-FRC"
+
 
 # this is for threading purposes and might improve preformance just a bit.
-def flask_local_server(server):
+def flask_local_server():
     NetworkTables.initialize(server=server)
     app.run(port=5000)
 
@@ -19,6 +21,9 @@ def index():
 
 @app.route("/tableConnected")
 def isConnected():
+    if not NetworkTables.isConnected():
+        NetworkTables.initialize(server=server)
+
     json_data = {"connected": NetworkTables.isConnected()}
 
     return jsonify(json_data)
@@ -68,9 +73,7 @@ def set_disabled(id):
 
 
 def main():
-    flask_thread = threading.Thread(
-        target=flask_local_server("roboRIO-308-FRC"), daemon=False
-    )
+    flask_thread = threading.Thread(target=flask_local_server(), daemon=False)
     flask_thread.start()
 
 
