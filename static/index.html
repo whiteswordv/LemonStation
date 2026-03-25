@@ -8,8 +8,17 @@
     <title>Lemon Workstation</title>
 </head>
 
+
+<div id="warning-container">
+    <p>
+        warning NetworkTables are disconnected,
+        make sure you have it plugged in with a link cable,
+        or over a radio!
+    </p>
+</div>
+
+
 <body>
-    <div id="warning"></div>
     <div id="motor-grid"></div>
     <div id="motor-menu">
         <div class="parent">
@@ -21,8 +30,8 @@
                 <div id="addon-properties">
                     <div id="drop-down-container">
                         <select name="MotorType" id="motor-dropdown-type">
-                            <option value="brushed" title="brushed"></option>
-                            <option value="brushless" title="brushless"></option>
+                            <option value="brushed">Brushed</option>
+                            <option value="brushless">Brushless</option>
                         </select>
                     </div>
                 </div> <!-- this is for encoders or other inputs or brushed brushless etc -->

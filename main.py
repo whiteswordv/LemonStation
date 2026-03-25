@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request, send_file
 from networktables import NetworkTables
 import threading
-import time
 
 app = Flask(__name__, static_url_path="")
 table = NetworkTables.getTable("LemonStation")
@@ -10,15 +9,6 @@ table = NetworkTables.getTable("LemonStation")
 # this is for threading purposes and might improve preformance just a bit.
 def flask_local_server(server):
     NetworkTables.initialize(server=server)
-    is_connected = NetworkTables.isConnected()
-
-    while not is_connected:
-        is_connected = NetworkTables.isConnected()
-        NetworkTables.initialize(server=server)
-
-        print("not connected!")
-        time.sleep(0.5)
-
     app.run(port=5000)
 
 
@@ -29,11 +19,9 @@ def index():
 
 @app.route("/tableConnected")
 def isConnected():
-    json_data = {
-        "connected": NetworkTables.isConnected(),
-    }
+    json_data = {"connected": NetworkTables.isConnected()}
 
-    return json_data
+    return jsonify(json_data)
 
 
 @app.route("/motors")

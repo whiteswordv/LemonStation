@@ -1,6 +1,9 @@
 const tileGrid = document.getElementById("motor-grid");
 const motorMenu = document.getElementById("motor-menu");
 const dropDownContainer = document.getElementById("drop-down-container");
+const warningContainer = document.getElementById("warning-container");
+
+// tile creation ----------------------------------------------------
 
 function createTile(motor) {
 
@@ -30,6 +33,8 @@ function createTile(motor) {
   tileGrid.append(tile);
 }
 
+// setting ----------------------------------------
+
 function settings(motor) {
   motorMenu.classList.remove("hidden");
   tileGrid.classList.add("hidden");
@@ -55,7 +60,7 @@ function settings(motor) {
   let back = document.getElementById("back-button");
   let invertButton = document.getElementById("inverted-input");
   let disableButton = document.getElementById("disabled-input");
-  let brushlessDropdown = document.getElementById("motor-dropdown-type");
+  let brushlessContainer = document.getElementById("drop-down-container");
   let speedSlider = document.getElementById("speed-slider");
 
   speedSlider.value = motor.speed;
@@ -67,7 +72,7 @@ function settings(motor) {
   motorImage.setAttribute("src", getImage(motor));
 
   let faults = document.getElementById("faults");
-  getFaults(motor, faults);
+  faults.innerHTML = motor.faults;
 
   speedSlider.addEventListener("input", () => {
 
@@ -103,7 +108,6 @@ function settings(motor) {
     });
   });
 
-
   disableButton.addEventListener("click", () => {
 
     let disabled = disableButton.checked ? "disabled" : "enabled";
@@ -125,9 +129,7 @@ function settings(motor) {
   });
 }
 
-function getFaults(motor, text) {
-  text.innerText = motor.faults;
-}
+// tile removment -------------------------------------------
 
 function removeTile(motor) {
   [...tileGrid.querySelectorAll(".motor-tile")].forEach((tile) => {
@@ -136,6 +138,8 @@ function removeTile(motor) {
     }
   });
 }
+
+// getting properties ----------------------------------------------
 
 function getDisplay(motor) {
   switch (motor.type) {
@@ -159,18 +163,19 @@ function getImage(motor) {
   }
 }
 
+
+// motor logic ----------------------------------------------------------
+
 let oldMotors = [];
 let motors = [
-  {
-    id: 0,
-    type: "sparkmax",
-    speed: 0,
-  },
-  {
-    id: 1,
-    type: "krakenx60",
-    speed: 0,
-  }
+  // {
+  //   "id": 3,
+  //   "brushless": false,
+  //   "disabled": true,
+  //   "type": "sparkmax",
+  //   "speed": 0,
+  //   "faults": "",
+  // }
 ];
 
 function includesMotor(array, motor) {
@@ -179,6 +184,17 @@ function includesMotor(array, motor) {
 
 function updateMotors() {
 
+
+  fetch("/tableConnected")
+    .then((response) => response.json())
+    .then((data) => {
+
+      if (!data.connected)
+        warningContainer.classList.remove("hidden");
+      else
+        warningContainer.classList.add("hidden");
+
+    });
   // getting the data from the flask local host
   fetch("/motors")
     .then((response) => response.json())
@@ -191,15 +207,16 @@ function updateMotors() {
     createTile(motor);
   });
 
-  // oldMotors.forEach((oldMotor) => {
+  oldMotors.forEach((oldMotor) => {
 
-  //   if (!includesMotor(motors, oldMotor)) removeTile(oldMotor || oldMotor.type == "unknown");
-  // });
+    if (!includesMotor(motors, oldMotor)) removeTile(oldMotor || oldMotor.type == "unknown");
+  });
 
   oldMotors = [...motors];
 }
 
 motorMenu.classList.add("hidden");
+warningContainer.classList.add("hidden");
 
 setInterval(() => {
   // checkNotification()
