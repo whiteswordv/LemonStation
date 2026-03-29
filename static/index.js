@@ -27,14 +27,9 @@ function createTile(motor) {
   tile.append(id);
   tile.append(img);
 
-  tile.addEventListener("click", () => {
+  tile.onclick = function () {
     settings(motor);
-
-    fetch(`/focused/${motor.id}?v=${true}`, {
-      method: "POST",
-    });
-
-  });
+  }
 
   tileGrid.append(tile);
 }
@@ -45,6 +40,10 @@ function settings(motor) {
   motorMenu.classList.remove("hidden");
   tileGrid.classList.add("hidden");
 
+  fetch(`/focused/${motor.id}?v=${true}`, {
+    method: "POST",
+  });
+
   if (motor.type != "sparkmax")
     dropDownContainer.classList.add("hidden");
   else
@@ -53,13 +52,11 @@ function settings(motor) {
 
   // title
 
-  let id = motor.id;
-
   let nameHeader = document.getElementById("motor-name");
   nameHeader.innerHTML = getDisplay(motor);
 
   let idHeader = document.getElementById("motor-id");
-  idHeader.innerHTML = "CAN id " + id;
+  idHeader.innerHTML = "CAN id " + motor.id;
 
   //properties
 
@@ -67,9 +64,11 @@ function settings(motor) {
   let invertButton = document.getElementById("inverted-input");
   let disableButton = document.getElementById("disabled-input");
   let speedSlider = document.getElementById("speed-slider");
+  let brushlessDropdown = document.getElementById("motor-dropdown-type");
 
   speedSlider.value = motor.speed;
   invertButton.checked = motor.inverted;
+  brushlessDropdown.value = motor.brushless;
 
   // dash board
 
@@ -79,70 +78,54 @@ function settings(motor) {
   let faults = document.getElementById("faults");
   faults.innerHTML = motor.faults;
 
-  speedSlider.addEventListener("input", () => {
+  speedSlider.addEventListener("input", () => setMotorSpeed(motor, speedSlider.value, invertButton.checked));
+  invertButton.onclick = setMotorSpeed(motor, speedSlider.value, invertButton.checked);
 
-    let invertedValue = 1;
-
-    if (invertButton.checked)
-      invertedValue = -1;
-
-    let speed = speedSlider.value * invertedValue;
-
-    speedOutput.innerHTML = "Speed: " + speed;
-
-    fetch(`/speed/${id}?v=${speed}`, {
-      method: "POST",
-    });
-  });
-
-  invertButton.onclick = function () {
-    let invertedValue = 1;
-
-    if (invertButton.checked)
-      invertedValue = -1;
-
-    let speed = speedSlider.value * invertedValue;
-
-    speedOutput.innerHTML = "Speed: " + speed;
-
-    fetch(`/speed/${id}?v=${speed}`, {
-      method: "POST",
-    });
-  };
-
-  let brushlessDropdown = document.getElementById("motor-dropdown-type");
-
+  // this depends on if its a sparkmax
   brushlessDropdown.addEventListener("change", () => {
-
-    fetch(`/brushless/${id}?v=${brushlessDropdown.value}`, {
+    fetch(`/brushless/${motor.id}?v=${brushlessDropdown.value}`, {
       method: "POST",
     });
   });
 
-  disableButton.onclick = function () {
+  disableButton.onchange = setMotorSpeed(motor, 0, invertButton.checked, disableButton.checked);
 
-    let disabled = disableButton.checked ? "disabled" : "enabled";
-
-    fetch(`/disabled/${id}?v=${disabled}`, {
-      method: "POST"
-    })
-  };
 
   back.onclick = () => {
 
     disableButton.checked = true;
 
-    fetch(`/disabled/${id}?v=${true}`, {
-      method: "POST"
-    });
+    setMotorSpeed(motor, 0, invertButton.checked, disableButton.checked);
 
-    fetch(`/focused/${id}?v=${false}`, {
+    fetch(`/focused/${motor.id}?v=${false}`, {
       method: "POST",
     });
 
     tileGrid.classList.remove("hidden");
     motorMenu.classList.add("hidden");
   };
+}
+
+function setMotorSpeed(motor, speed, inverted, disabled) {
+
+  if (disabled) {
+    fetch(`/speed/${motor.id}?v=${0}`, {
+      method: "POST",
+    });
+
+    return;
+  }
+
+  let inverted = 1;
+
+  if (inverted)
+    invertedValue = -1;
+
+  speedOutput.innerHTML = "Speed: " + speed * inverted;
+
+  fetch(`/speed/${motor.id}?v=${speed * inverted}`, {
+    method: "POST",
+  });
 }
 
 // tile removment -------------------------------------------
@@ -187,10 +170,11 @@ let motors = [
   {
     "id": 3,
     "brushless": false,
-    "disabled": true,
     "type": "sparkmax",
     "speed": 0,
     "faults": "",
+    "stickyFaults": "",
+    "focused": false
   }
 ];
 

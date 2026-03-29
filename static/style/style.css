@@ -350,3 +350,33 @@ img {
 
 
 }
+
+#faults-container {
+    background-color: var(--primary-color);
+    border-color: var(--border-color);
+    border-width: 1px;
+    border: solid;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    button:active {
+        border-radius: 5px;
+        background-color: var(--active-color);
+        color: var(--active-text-color);
+    }
+
+    input {
+        font-size: 3dvh;
+        accent-color: var(--text-color);
+        border: 1px solid var(--border-color);
+        transition: border-color 0.2s ease;
+    }
+
+    input:active {
+        border-color: var(--text-color);
+    }
+}

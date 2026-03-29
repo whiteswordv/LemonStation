@@ -34,11 +34,11 @@ def motors():
             {
                 "id": int(sub_name),
                 "brushless": sub_table.getBoolean("brushless", False),
-                "disabled": sub_table.getBoolean("disabled", True),
-                "focused": sub_table.getBoolean("focused", False),
                 "type": sub_table.getString("type", ""),
                 "speed": sub_table.getNumber("speed", 0),
                 "faults": sub_table.getString("faults", ""),
+                "stickyFaults": sub_table.getString("stickyFaults", ""),
+                "focused": sub_table.getBoolean("focused"),
             }
         )
 
@@ -51,8 +51,6 @@ def set_motor_speed(id):
 
     table.getSubTable(str(id)).putNumber("speed", speed)
 
-    return jsonify({"speed": speed})
-
 
 @app.post("/brushless/<int:id>")
 def set_brushless(id):
@@ -60,29 +58,15 @@ def set_brushless(id):
 
     table.getSubTable(str(id)).putBoolean("brushless", brushless)
 
-    return jsonify({"brushless": brushless})
 
-
-@app.post("/focused<int:id>")
+@app.post("/focused/<int:id>")
 def set_focused(id):
     focused = request.args.get("v") == "focused"
 
     table.getSubTable(str(id)).putBoolean("focused", focused)
 
-    return jsonify({"focused": focused})
-
-
-@app.post("/disabled/<int:id>")
-def set_disabled(id):
-    disabled = request.args.get("v") == "disabled"
-
-    table.getSubTable(str(id)).putBoolean("disabled", disabled)
-
-    return jsonify({"disabled": disabled})
-
 
 def main():
-
     NetworkTables.initialize(server=server)
     app.run(port=5000)
 
