@@ -12,6 +12,11 @@
     --warning-primary-color: rgb(49, 14, 34);
     --warning-border-color: rgb(255, 0, 106);
     --warning-text-color: rgb(228, 175, 188);
+
+    --inside-bg-color: rgb(0, 0, 0);
+    --inside-primary-color: rgb(0, 0, 0);
+    --inside-border-color: rgb(0, 0, 0);
+    --inside-text-color: rgb(0, 0, 0);
 }
 
 *,
@@ -362,6 +367,9 @@ img {
 
     overflow-x: hidden;
     overflow-y: scroll;
+
+    height: 100%;
+    width: 100%;
 
     button:active {
         border-radius: 5px;

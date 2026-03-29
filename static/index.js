@@ -6,6 +6,9 @@ const warningContainer = document.getElementById("warning-container");
 
 // tile creation ----------------------------------------------------
 
+motorMenu.classList.add("hidden");
+warningContainer.classList.add("hidden");
+
 function createTile(motor) {
 
   if (getDisplay(motor) == "Unknown")
@@ -27,7 +30,7 @@ function createTile(motor) {
   tile.append(id);
   tile.append(img);
 
-  tile.onclick = function () {
+  tile.onclick = () => {
     settings(motor);
   }
 
@@ -45,9 +48,9 @@ function settings(motor) {
   });
 
   if (motor.type != "sparkmax")
-    dropDownContainer.classList.add("hidden");
+    dropDownContainer?.classList.add("hidden");
   else
-    dropDownContainer.classList.remove("hidden");
+    dropDownContainer?.classList.remove("hidden");
 
 
   // title
@@ -78,18 +81,17 @@ function settings(motor) {
   let faults = document.getElementById("faults");
   faults.innerHTML = motor.faults;
 
-  speedSlider.addEventListener("input", () => setMotorSpeed(motor, speedSlider.value, invertButton.checked));
-  invertButton.onclick = setMotorSpeed(motor, speedSlider.value, invertButton.checked);
+  speedSlider.onchange = () => setMotorSpeed(motor, speedSlider.value, invertButton.checked);
+  invertButton.onclick = () => setMotorSpeed(motor, speedSlider.value, invertButton.checked);
 
   // this depends on if its a sparkmax
-  brushlessDropdown.addEventListener("change", () => {
+  brushlessDropdown.onchange = () => {
     fetch(`/brushless/${motor.id}?v=${brushlessDropdown.value}`, {
       method: "POST",
     });
-  });
+  }
 
-  disableButton.onchange = setMotorSpeed(motor, 0, invertButton.checked, disableButton.checked);
-
+  disableButton.onchange = () => setMotorSpeed(motor, 0, invertButton.checked, disableButton.checked);
 
   back.onclick = () => {
 
@@ -116,14 +118,14 @@ function setMotorSpeed(motor, speed, inverted, disabled) {
     return;
   }
 
-  let inverted = 1;
+  let invertedValue = 1;
 
   if (inverted)
     invertedValue = -1;
 
-  speedOutput.innerHTML = "Speed: " + speed * inverted;
+  speedOutput.innerHTML = "Speed: " + speed * invertedValue;
 
-  fetch(`/speed/${motor.id}?v=${speed * inverted}`, {
+  fetch(`/speed/${motor.id}?v=${speed * invertedValue}`, {
     method: "POST",
   });
 }
@@ -215,10 +217,7 @@ function updateMotors() {
   oldMotors = [...motors];
 }
 
-motorMenu.classList.add("hidden");
-warningContainer.classList.add("hidden");
-
 setInterval(() => {
   // checkNotification()
   updateMotors();
-}, 400);
+}, 500);
