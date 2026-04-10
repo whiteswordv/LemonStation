@@ -45,10 +45,6 @@ function settings(motor) {
   motorMenu.classList.remove("hidden");
   tileGrid.classList.add("hidden");
 
-  fetch(`/focused/${motor.id}?v=${true}`, {
-    method: "POST",
-  });
-
   if (motor.type != "sparkmax")
     dropDownContainer?.classList.add("hidden");
   else
@@ -71,9 +67,9 @@ function settings(motor) {
   const speedSlider = document.getElementById("speed-slider");
   const brushlessDropdown = document.getElementById("motor-dropdown-type");
 
-  const pInput = pidContainer.getElementById("p-input");
-  const iInput = pidContainer.getElementById("i-input");
-  const dInput = pidContainer.getElementById("d-input");
+  const pInput = pidContainer.querySelector("#p-input");
+  const iInput = pidContainer.querySelector("#i-input");
+  const dInput = pidContainer.querySelector("#d-input");
 
   // const applyPidButton = pidContainer.getElementById("apply-button"); 
   // applyPidButton.onclick = () => setPidControl(motor, pInput.value, iInput.value, dInput.value, disableButton.checked);
@@ -110,27 +106,22 @@ function settings(motor) {
 
     setMotorSpeed(motor, 0, invertButton.checked, disableButton.checked);
 
-    fetch(`/focused/${motor.id}?v=${false}`, {
-      method: "POST",
-    });
-
     tileGrid.classList.remove("hidden");
     motorMenu.classList.add("hidden");
   };
 }
 
 function setMotorSpeed(motor, speed, inverted, disabled) {
+  console.log(true);
 
-  // sets the motor speed to 0 if its disabled, and returns.
+  let invertedValue = inverted ? -1 : 1;
+  invertedValue *= disabled ? 0 : 1;
+
   if (disabled) {
     fetch(`/speed/${motor.id}?v=${0}`, {
       method: "POST",
     });
-
-    return;
   }
-
-  const invertedValue = inverted ? -1 : 1;
 
   // posts the speed over the network
   fetch(`/speed/${motor.id}?v=${speed * invertedValue}`, {
