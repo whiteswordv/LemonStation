@@ -58,7 +58,9 @@ def motors():
 def set_motor_speed(id):
     speed = request.args.get("v") or 0
 
-    table.getSubTable(str(id)).putNumber("speed", speed)
+    table.getSubTable(str(id)).putNumber("speed", float(speed))
+
+    return jsonify(speed)
 
 
 @app.post("/brushless/<int:id>")
@@ -67,6 +69,8 @@ def set_brushless(id):
 
     table.getSubTable(str(id)).putBoolean("brushless", brushless)
 
+    return jsonify(brushless)
+
 
 @app.post("/focused/<int:id>")
 def set_focused(id):
@@ -74,13 +78,8 @@ def set_focused(id):
 
     table.getSubTable(str(id)).putBoolean("focused", focused)
 
+    return jsonify(focused)
 
-@app.post("/pid/<int:id>")
-def set_pid(id):
-
-    pid = request.args.get("v") == "pid"
-
-    table.getSubTable(str(id)).putNumberArray("pid", pid)
 
 
 def main():
